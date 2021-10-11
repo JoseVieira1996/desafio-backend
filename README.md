@@ -1,47 +1,51 @@
 # Desafio Back-End
 
-Esse é o nosso desafio para os candidatos à vaga de back-end na [TradeMap](https://www.linkedin.com/company/trademaphub).
+Desafio para os candidatos à vaga de back-end na [TradeMap](https://www.linkedin.com/company/trademaphub).
 
-Mesmo que você não esteja em nosso processo seletivo, você pode iniciá-lo resolvendo esse desafio.
+## Tecnologias utilizadas
+O projeto foi desenvolvido seguindo o padrão DTO, tendo as tecnologias abaixo sendo utilizadas no inicio ou no fim do projeto.
 
-Atualmente, todo o nosso backend está escrito em Java/Kotlin, utilizando Spring como framework.
+- Java
+- Postgres
+- Banco de Dados H2
+- Heroku
+- Docker
 
-# O Desafio
+## Solução
+A solução foi implementada com Spring Boot, hospedada no Heroku e está disponível no DockerHub josevieira1996/desafio:
 
-Precisamos de uma API que sirva o Back-end de um blog. Essa API precisa ser capaz de:
+A imagem está em: josevieira1996/desafio:v1
 
-- Criar um Post
-- Editar um Post
-- Deletar um Post
-- Listar os Posts de maneira paginada, permitindo filtro por data.
-- Obter informações de um Post por ID.
+Pode ser executada por:
 
-A entidade `Post`, deve ter os seguintes campos:
+docker run -p 80:8080 --name desafio-heroku -e APP_PROFILE=dev -e DB_URL=jdbc:postgresql://ec2-18-214-214-252.compute-1.amazonaws.com:5432/d6dkat9g6e9app -e DB_USERNAME=qmordbyigmzdpp -e DB_PASSWORD=38e533217356ea36f825d63b0652404b59846b6b1eb7681700583469285baec7 desafio:v1
 
-- id -> Identificador do Post.
-- title -> Título do Post.
-- description -> Descrição do Post.
-- body -> Corpo do Post.
-- created_at -> Data de criação do Post.
-- updated_at -> Data de atualização do Post.
 
-Você pode utilizar qualquer banco, desde que ele seja [SQL](http://www.sqlcourse.com/intro.html).
+## Endpoints
+Existem 6 endpoints que estão disponíveis para download abaixo. As requisições devem ser descompactadas e importadas no Postman:
 
-## Requisitos
+[LINK PARA DOWNLOAD] https://drive.google.com/file/d/1syJqnnlafYbx7CGqj8AogAOvqcPwlpK6/view?usp=sharing
 
-- Todas as respostas precisam ser retornadas no formato [JSON](https://www.json.org/json-en.html).
-- Crie um `README.md` com as informações de como usar sua aplicação. (como executar, quais são as rotas, etc)
-- Publique sua aplicação em algum servidor. (Heroku, AWS, Azure, Digital Ocean)
+GET http://localhost:80/posts :retorna todos os post de forma paginada;
 
-## Diferenciais
+GET http://localhost:80/posts/{id}: mostra um post especifico;
 
-- Utilize migrations para a criação dos Schemas da sua aplicação. (Flyway, Liquibase)
-- [Dockerize](https://www.docker.com/) sua aplicação.
-- Crie testes unitários para a sua aplicação.
-- Utilize os princípios SOLID em sua aplicação.
+GET http://localhost:80/posts?page=0&linesPerPage=10&direction=ASC&orderBy=createdAt: retorna uma lista de posts ordenada por data
 
-## Como entregar o teste
+POST http://localhost:80/posts : insere um novo post
 
-1. Faça um fork desse repositório.
-2. Resolva o desafio da melhor maneira que você puder.
-3. Envie um pull-request para análise do resultado.
+PUT http://localhost:80/{id} : atualiza um  post
+
+DELETE http://localhost:80/{id} : exclui um  post
+
+## Considerações finais
+
+A aplicação já está vinculada ao Postgres, mas ainda em modo de DEV. Sendo assim, para visualização das mudanças ocorridas e salvas no atributo "updatedAt", sugiro iniciar a aplicação na IDE de sua preferência e acessar o banco de dados H2 em http://localhost:8080/h2-console. Os dados de login e senha estão em "application-test.properties". A porta para acessar o H2 deve ser modificada para 8080, mantendo o restante das informações do endpoint:
+
+Exemplo:
+
+POST http://localhost:80/posts - POSTGRES
+
+POST http://localhost:8080/posts - H2
+
+
